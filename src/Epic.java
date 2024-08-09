@@ -5,8 +5,12 @@ public class Epic extends Task {
 
     public Epic(Integer id, String name, String description) {
         super(id, name, description);
+        super.setStatus(Status.NEW);
+    }
+
+    public Epic(Integer id, String name, String description, Status status, ArrayList<Integer> subtaskIds) {
+        super(id, name, description, status);
         this.subtaskIds = subtaskIds;
-        super.status = Status.NEW;
     }
 
     public void addSubtaskId(int subtaskId) {
@@ -22,15 +26,17 @@ public class Epic extends Task {
     }
 
     public ArrayList<Integer> getSubtaskIds() {
-        return subtaskIds;
+        return new ArrayList<Integer>(subtaskIds);
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public boolean isEmptySubtaskIds () {
+    public boolean isEmptySubtaskIds() {
         return subtaskIds.isEmpty();
+    }
+
+    public void deleteAllSubtaskIds() {
+        if (!isEmptySubtaskIds()) {
+            subtaskIds.clear();
+        }
     }
 }
 

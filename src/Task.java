@@ -1,7 +1,7 @@
 public class Task {
     private String name;
     private String description;
-    Status status;
+    private Status status;
     private Integer id;
 
     public Task(Integer id, String name, String description, Status status) {
@@ -43,6 +43,10 @@ public class Task {
 
     public Status getStatus() {
         return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
