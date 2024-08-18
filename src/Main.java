@@ -1,7 +1,7 @@
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
         Task taskOne = new Task(12, "Литература",
                 "Прочитать книгу Война и Мир", Status.NEW);
@@ -73,12 +73,58 @@ public class Main {
         System.out.println("-".repeat(100));
         System.out.println();
 
+        System.out.println("История просмотра.");
+        System.out.println();
+
+        System.out.println("История:");
+        //Приведение типов для вывода истории
+        for (Task task : ((InMemoryTaskManager) taskManager).getHistory()) {
+            System.out.println(task);
+        }
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+
         System.out.println("Выводим задачу, подзадачу, эпик по id.");
         System.out.println();
 
         System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()));
         System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()));
         System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+
+        System.out.println("Для проверки истории просмотра выводим/просматриваем задачи, подзадачи, эпики по id.");
+        System.out.println();
+
+        System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()));
+        System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()));
+        System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()));
+        System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()));
+        System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()));
+        System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+
+        System.out.println("История просмотра.");
+        System.out.println();
+
+        System.out.println("История:");
+        //Приведение типов для вывода истории
+        for (Task task : ((InMemoryTaskManager) taskManager).getHistory()) {
+            System.out.println(task);
+        }
 
         System.out.println("-".repeat(100));
         System.out.println();
