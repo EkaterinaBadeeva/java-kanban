@@ -1,4 +1,10 @@
-import java.util.ArrayList;
+package manager;
+
+import model.Epic;
+import model.Subtask;
+import model.Task;
+
+import java.util.List;
 
 public interface TaskManager {
     Task addNewTask(Task newTask);
@@ -19,13 +25,13 @@ public interface TaskManager {
 
     Epic deleteEpic(Integer id);
 
-    ArrayList<Task> getAllOfTask();
+    List<Task> getAllOfTask();
 
-    ArrayList<Subtask> getAllOfSubtask();
+    List<Subtask> getAllOfSubtask();
 
-    ArrayList<Epic> getAllOfEpic();
+    List<Epic> getAllOfEpic();
 
-    ArrayList<Subtask> getAllSubtaskOfEpic(Integer id);
+    List<Subtask> getAllSubtaskOfEpic(Integer id);
 
     void deleteAllOfTask();
 
@@ -38,5 +44,7 @@ public interface TaskManager {
     Subtask getByIdSubtask(Integer id);
 
     Epic getByIdEpic(Integer id);
+
+    List<Task> getHistory();
 
 }

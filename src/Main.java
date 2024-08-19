@@ -1,3 +1,10 @@
+import manager.Managers;
+import manager.TaskManager;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -77,8 +84,8 @@ public class Main {
         System.out.println();
 
         System.out.println("История:");
-        //Приведение типов для вывода истории
-        for (Task task : ((InMemoryTaskManager) taskManager).getHistory()) {
+
+        for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
 
@@ -121,8 +128,8 @@ public class Main {
         System.out.println();
 
         System.out.println("История:");
-        //Приведение типов для вывода истории
-        for (Task task : ((InMemoryTaskManager) taskManager).getHistory()) {
+
+        for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
 

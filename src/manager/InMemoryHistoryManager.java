@@ -1,3 +1,7 @@
+package manager;
+
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +23,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (object == null) {
             return;
         }
-        if (history.size() < 10) {
-            history.addLast(object);
-        } else {
+        if (history.size() >= 10) {
             history.removeFirst();
-            history.addLast(object);
         }
+        history.addLast(object);
     }
 }

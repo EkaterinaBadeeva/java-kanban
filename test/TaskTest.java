@@ -1,3 +1,6 @@
+import manager.InMemoryTaskManager;
+import model.Status;
+import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,13 +10,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
-    private static HistoryManager historyManager;
     private static InMemoryTaskManager taskManager;
 
     @BeforeEach
     public void beforeEach() {
-        historyManager = new InMemoryHistoryManager();
-        taskManager = new InMemoryTaskManager(historyManager);
+        taskManager = new InMemoryTaskManager();
     }
 
     @Test
@@ -120,7 +121,7 @@ class TaskTest {
         Task taskTest = taskManager.getByIdTask(task.getId());
 
         //do
-        final List<Task> history = historyManager.getHistory();
+        final List<Task> history = taskManager.getHistory();
 
         //check
         assertNotNull(history, "История пустая.");

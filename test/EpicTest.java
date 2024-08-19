@@ -1,3 +1,8 @@
+import manager.InMemoryTaskManager;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,13 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EpicTest {
 
-    private static HistoryManager historyManager;
     private static InMemoryTaskManager taskManager;
 
     @BeforeEach
     public void beforeEach() {
-        historyManager = new InMemoryHistoryManager();
-        taskManager = new InMemoryTaskManager(historyManager);
+        taskManager = new InMemoryTaskManager();
     }
 
     @Test
@@ -163,7 +166,7 @@ class EpicTest {
         Epic epicTest = taskManager.getByIdEpic(epic.getId());
 
         //do
-        final List<Task> history = historyManager.getHistory();
+        final List<Task> history = taskManager.getHistory();
 
         //check
         assertNotNull(history, "История пустая.");
