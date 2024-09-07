@@ -165,5 +165,110 @@ public class Main {
         System.out.println("Все задачи: " + taskManager.getAllOfTask());
         System.out.println("Все подзадачи: " + taskManager.getAllOfSubtask());
         System.out.println("Все эпики: " + taskManager.getAllOfEpic());
+
+        //Дополнительное задание по техническому заданию к спринту №6.
+        // Реализуем пользовательский сценарий.
+        Task task1 = new Task(12, "Задача1",
+                "Описание Задачи1", Status.NEW);
+        Task task2 = new Task(13, "Задача2",
+                "Описание Задачи2",
+                Status.NEW);
+
+        taskManager.addNewTask(task1);
+        taskManager.addNewTask(task2);
+
+        Epic epic1 = new Epic(14, "Эпик1", "Описание Эпика1");
+        taskManager.addNewEpic(epic1);
+        Subtask subtask1InEpic1 = new Subtask(15, "Подзадача1",
+                "Описание Подзадачи1", Status.NEW, epic1.getId());
+        Subtask subtask2InEpic1 = new Subtask(16, "Подзадача2",
+                "Описание Подзадачи2", Status.NEW, epic1.getId());
+        Subtask subtask3InEpic1 = new Subtask(17, "Подзадача3",
+                "Описание Подзадачи3", Status.NEW, epic1.getId());
+        taskManager.addNewSubtask(subtask1InEpic1);
+        taskManager.addNewSubtask(subtask2InEpic1);
+        taskManager.addNewSubtask(subtask3InEpic1);
+
+        Epic epic2 = new Epic(18, "Эпик2", "Описание Эпика2");
+        taskManager.addNewEpic(epic2);
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+        System.out.println("Созданы и добавлены задачи, эпики, подзадачи для ТЗ №6.");
+        System.out.println();
+
+        System.out.println("Все задачи: " + taskManager.getAllOfTask());
+        System.out.println("Все подзадачи: " + taskManager.getAllOfSubtask());
+        System.out.println("Все эпики: " + taskManager.getAllOfEpic());
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+
+        System.out.println("Для проверки истории просмотра выводим/просматриваем задачи, подзадачи, эпики по id.");
+        System.out.println();
+        System.out.println("Задача1 по id: " + taskManager.getByIdTask(task1.getId()));
+        System.out.println("Задача2 по id: " + taskManager.getByIdTask(task2.getId()));
+        System.out.println("Подзадача1 по id: " + taskManager.getByIdSubtask(subtask1InEpic1.getId()));
+        System.out.println("Подзадача2 по id: " + taskManager.getByIdSubtask(subtask2InEpic1.getId()));
+        System.out.println("Подзадача3 по id: " + taskManager.getByIdSubtask(subtask3InEpic1.getId()));
+        System.out.println("Эпик1 по id: " + taskManager.getByIdEpic(epic1.getId()));
+        System.out.println("Эпик2 по id: " + taskManager.getByIdEpic(epic2.getId()));
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+
+        System.out.println("История просмотра:");
+
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        System.out.println();
+
+        System.out.println("Для проверки истории просмотра повторно выводим/просматриваем задачи по id.");
+        System.out.println();
+        System.out.println("Задача1 по id: " + taskManager.getByIdTask(task1.getId()));
+        System.out.println("Подзадача3 по id: " + taskManager.getByIdSubtask(subtask3InEpic1.getId()));
+        System.out.println("Эпик2 по id: " + taskManager.getByIdEpic(epic2.getId()));
+        System.out.println("Задача2 по id: " + taskManager.getByIdTask(task2.getId()));
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+
+        System.out.println("История просмотра:");
+
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+        System.out.println("Удаляем Задачу1");
+
+        taskManager.deleteTask(task1.getId());
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+
+        System.out.println("История просмотра:");
+
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+        System.out.println("Удаляем Эпик1");
+
+        taskManager.deleteEpic(epic1.getId());
+
+        System.out.println("-".repeat(100));
+        System.out.println();
+
+        System.out.println("История просмотра:");
+
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
     }
 }

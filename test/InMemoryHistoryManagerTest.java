@@ -18,17 +18,29 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void shouldAddObjectInHistoryNoMoreThan10() {
+    public void shouldAddAllObjectInHistoryAndDeleteRepeats() {
+        //prepare
         for (int i = 1; i <= 11; i++) {
             Task task = new Task(i, "Test task", "Test task description", Status.NEW);
             taskManager.addNewTask(task);
             taskManager.getByIdTask(i);
         }
+        for (int i = 1; i <= 4; i++) {
+            Task task = new Task(i, "Test task", "Test task description", Status.NEW);
+            taskManager.addNewTask(task);
+            taskManager.getByIdTask(i);
+        }
+        Task task1 = new Task(12, "Test task", "Test task description", Status.NEW);
+        taskManager.addNewTask(task1);
+        taskManager.getByIdTask(task1.getId());
+
+        //do
+        taskManager.deleteTask(task1.getId());
         final List<Task> history = taskManager.getHistory();
 
         //check
         assertNotNull(history, "История пустая.");
-        assertEquals(10, history.size());
+        assertEquals(11, history.size());
     }
 
     @Test
