@@ -12,5 +12,5 @@ public interface HistoryManager {
 
     void removeHistory(int id);
 
-    void removeHistory (Set<Integer> ids);
+    void removeHistory(Set<Integer> ids);
 }
