@@ -20,16 +20,17 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void addHistory(Task task) {
-        if (task == null) {
-            return;
+        if (task != null) {
+            Node<Task> node = historyMap.get(task.getId());
+
+            if (node != null) {
+                historyList.removeNode(node);
+            }
+
+            historyList.linkLast(task);
+            Node<Task> newNode = historyList.getLast();
+            historyMap.put(task.getId(), newNode);
         }
-        Node<Task> node = historyMap.get(task.getId());
-        if (node != null) {
-            historyList.removeNode(node);
-        }
-        historyList.linkLast(task);
-        Node<Task> newNode = historyList.getLast();
-        historyMap.put(task.getId(), newNode);
     }
 
     @Override
@@ -91,10 +92,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             if (previous != null) {
                 previous.next = next;
             }
-
-            node.next = null;
-            node.previous = null;
-            node.data = null;
         }
     }
 }
