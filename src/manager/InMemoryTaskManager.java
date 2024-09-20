@@ -106,16 +106,18 @@ public class InMemoryTaskManager implements TaskManager {
     public Task deleteTask(Integer id) {
         Task task = idTask.get(id);
         idTask.remove(id);
+        history.removeHistory(id);
         return task;
     }
 
     @Override
     public Subtask deleteSubtask(Integer id) {
         Subtask subtask = idSubtask.get(id);
-        if(subtask != null) {
+        if (subtask != null) {
             int idEp = subtask.getEpicId();
             Epic epic = idEpic.get(idEp);
             idSubtask.remove(id);
+            history.removeHistory(id);
             epic.deleteSubtaskId(id);
             updateEpicStatus(epic);
         }
@@ -125,13 +127,15 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic deleteEpic(Integer id) {
         Epic epic = idEpic.get(id);
-        if(epic != null) {
+        if (epic != null) {
             for (int i : epic.getSubtaskIds()) {
                 idSubtask.remove(i);
+                history.removeHistory(i);
                 epic.deleteSubtaskId(i);
             }
         }
         idEpic.remove(id);
+        history.removeHistory(id);
         return epic;
     }
 
@@ -178,11 +182,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllOfTask() {
+        history.removeHistory(idTask.keySet());
         idTask.clear();
     }
 
     @Override
     public void deleteAllOfSubtask() {
+        history.removeHistory(idSubtask.keySet());
         idSubtask.clear();
 
         for (Epic epic : idEpic.values()) {
@@ -193,11 +199,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllOfEpic() {
+        history.removeHistory(idSubtask.keySet());
         idSubtask.clear();
 
         for (Epic epic : idEpic.values()) {
             epic.deleteAllSubtaskIds();
         }
+        history.removeHistory(idEpic.keySet());
         idEpic.clear();
     }
 
@@ -222,6 +230,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         return epic;
     }
+
     private void updateEpicStatus(Epic epic) {
         boolean isNewStatus = true;
         boolean isDoneStatus = true;
