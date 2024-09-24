@@ -10,6 +10,7 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
     private String fileName;
+
     public FileBackedTaskManager(String fileName) {
         super();
         this.fileName = fileName;
@@ -69,6 +70,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         }
         return null;
     }
+
     // Метод, который восстанавливает данные менеджера из файла при запуске программы
     public static FileBackedTaskManager loadFromFile(String path) {
         TaskManager taskManager = new FileBackedTaskManager(path);
