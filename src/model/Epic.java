@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Epic extends Task {
+    private TypeTasks typeTasks = TypeTasks.EPIC;
     private ArrayList<Integer> subtaskIds = new ArrayList<>();
 
     public Epic(Integer id, String name, String description) {
@@ -39,6 +40,18 @@ public class Epic extends Task {
         if (!isEmptySubtaskIds()) {
             subtaskIds.clear();
         }
+    }
+
+    @Override
+    public String toString() {
+
+        return this.getId() + "," + typeTasks +
+                "," + this.getName() + "," + this.getStatus() + "," +
+                this.getDescription();
+    }
+    @Override
+    public TypeTasks getTypeTasks() {
+        return typeTasks;
     }
 }
 
