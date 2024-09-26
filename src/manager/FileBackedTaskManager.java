@@ -4,18 +4,15 @@ import model.*;
 
 import java.io.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private String fileName;
 
     public FileBackedTaskManager(String fileName) {
         super();
         this.fileName = fileName;
     }
-
 
     // Метод, который сохраняет все задачи, подзадачи и эпики
     private void save() {
@@ -24,25 +21,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             List<Epic> allEpic = getAllOfEpic();
             List<Subtask> allSubtasks = getAllOfSubtask();
 
-            bw.write("ID,TYPE,NAME,NEW,DESCRIPTION,EPIC\n");
+            bw.write("ID,TYPE,NAME,STATUS,DESCRIPTION,EPIC\n");
 
             if (allTasks != null) {
                 for (Task task : allTasks) {
-                    String taskAsString = task.toString(); // метод toString
+                    String taskAsString = task.toString();
                     bw.write(taskAsString + "\n");
                 }
             }
 
             if (allSubtasks != null) {
                 for (Subtask subtask : allSubtasks) {
-                    String subtaskAsString = subtask.toString(); // метод toString
+                    String subtaskAsString = subtask.toString();
                     bw.write(subtaskAsString + "\n");
                 }
             }
 
             if (allEpic != null) {
                 for (Epic epic : allEpic) {
-                    String epicAsString = epic.toString(); // метод toString
+                    String epicAsString = epic.toString();
                     bw.write(epicAsString + "\n");
                 }
             }
@@ -54,60 +51,83 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     // Метод создания задачи из строки
-    public static Task fromString(String value) {
-        String[] contents = value.split(",");
+    private static Task fromString(String value) {
+        try {
+            String[] contents = value.split(",");
 
-        switch (TypeTasks.valueOf(contents[1])) {
-            case TASK:
-                return new Task(Integer.parseInt(contents[0]), contents[2], contents[4], Status.valueOf(contents[3]));
+            // id - contents[0], type - contents[1], name - contents[2], status - contents[3],
+            // description - contents[4], idEpic - contents[5]
+            Integer id = Integer.parseInt(contents[0]);
+            TypeTasks type = TypeTasks.valueOf(contents[1]);
+            String name = contents[2];
+            Status status = Status.valueOf(contents[3]);
+            String description = contents[4];
 
-            case SUBTASK:
-                return new Subtask(Integer.parseInt(contents[0]), contents[2], contents[4],
-                        Status.valueOf(contents[3]), Integer.parseInt(contents[5]));
+            switch (type) {
+                case TASK:
+                    return new Task(id, name, description, status);
 
-            case EPIC:
-                return new Epic(Integer.parseInt(contents[0]), contents[2], contents[4]);
+                case SUBTASK:
+                    return new Subtask(id, name, description, status, Integer.parseInt(contents[5]));
+
+                case EPIC:
+                    return new Epic(id, name, description, status);
+            }
+
+        } catch (RuntimeException e) {
+            throw new ManagerSaveException("Ошибка при создании задачи из строки" + e.getMessage());
         }
         return null;
     }
 
     // Метод, который восстанавливает данные менеджера из файла при запуске программы
     public static FileBackedTaskManager loadFromFile(String path) {
-        TaskManager taskManager = new FileBackedTaskManager(path);
+        FileBackedTaskManager taskManager = new FileBackedTaskManager(path);
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(path));
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
 
             //Чтение заголовка
             br.readLine();
 
-            List<Subtask> listOfSubtasks = new ArrayList<>();
+            int maxId = 0;
+
             while (br.ready()) {
                 String line = br.readLine();
 
                 Task task = fromString(line);
+                int taskId = task.getId();
+
                 switch (task.getTypeTasks()) {
                     case TASK:
-                        taskManager.addNewTask(task);
+                        taskManager.idTask.put(taskId,task);
                         break;
                     case SUBTASK:
-                        listOfSubtasks.add((Subtask) task);
-
+                        taskManager.idSubtask.put(taskId, (Subtask) task);
                         break;
                     case EPIC:
-                        taskManager.addNewEpic((Epic) task);
+                        taskManager.idEpic.put(taskId, (Epic) task);
                         break;
+                }
+
+                if (maxId < taskId) {
+                    maxId = taskId;
                 }
             }
 
-            for (Subtask subtask : listOfSubtasks) {
-                taskManager.addNewSubtask(subtask);
+            taskManager.id = maxId;
+
+            for (Subtask subtask : taskManager.idSubtask.values()) {
+                Epic epic = taskManager.idEpic.get(subtask.getEpicId());
+
+                if (epic != null) {
+                    epic.addSubtaskId(subtask.getId());
+                }
             }
 
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new ManagerSaveException("Ошибка при восстановлении данных менеджера из файла" + e.getMessage());
         }
-        return (FileBackedTaskManager) taskManager;
+        return taskManager;
     }
 
     @Override
@@ -218,6 +238,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         Epic epic2 = new Epic(18, "Эпик2", "Описание Эпика2");
         fileTaskManager.addNewEpic(epic2);
 
+        Subtask subtask1UpdatedInEpic1 = new Subtask(subtask1InEpic1.getId(), "Подзадача1",
+                "Описание Подзадачи1", Status.IN_PROGRESS, epic1.getId());
+        fileTaskManager.updateSubtask(subtask1UpdatedInEpic1);
+
         System.out.println("-".repeat(100));
         System.out.println();
         System.out.println("Созданы и добавлены задачи, эпики, подзадачи для ТЗ №7.");
@@ -230,10 +254,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         System.out.println("-".repeat(100));
         System.out.println();
 
-        TaskManager fileTaskManager1 = loadFromFile(fileName);
+        TaskManager fileTaskManagerFromFile = loadFromFile(fileName);
 
-        System.out.println("Все задачи: " + fileTaskManager1.getAllOfTask());
-        System.out.println("Все подзадачи: " + fileTaskManager1.getAllOfSubtask());
-        System.out.println("Все эпики: " + fileTaskManager1.getAllOfEpic());
+        System.out.println("Все задачи: " + fileTaskManagerFromFile.getAllOfTask());
+        System.out.println("Все подзадачи: " + fileTaskManagerFromFile.getAllOfSubtask());
+        System.out.println("Все эпики: " + fileTaskManagerFromFile.getAllOfEpic());
+        System.out.println("-".repeat(100));
+
+        Task task3 = new Task(12, "Задача3",
+                "Описание Задачи3", Status.NEW);
+        fileTaskManagerFromFile.addNewTask(task3);
+        System.out.println("Все задачи: " + fileTaskManagerFromFile.getAllOfTask());
     }
 }
