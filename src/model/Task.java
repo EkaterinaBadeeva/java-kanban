@@ -7,6 +7,7 @@ public class Task {
     private String description;
     private Status status;
     private Integer id;
+    private TypeTasks typeTasks = TypeTasks.TASK;
 
     public Task(Integer id, String name, String description, Status status) {
         this.id = id;
@@ -55,12 +56,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                ", id=" + id +
-                '}';
+        return id + "," + typeTasks + "," + name + "," + status + "," + description;
     }
 
     @Override
@@ -74,5 +70,9 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public TypeTasks getTypeTasks() {
+        return typeTasks;
     }
 }

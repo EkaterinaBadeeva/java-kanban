@@ -11,19 +11,19 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private Map<Integer, Task> idTask = new HashMap<>();
-    private Map<Integer, Epic> idEpic = new HashMap<>();
-    private Map<Integer, Subtask> idSubtask = new HashMap<>();
+    protected Map<Integer, Task> idTask = new HashMap<>();
+    protected Map<Integer, Epic> idEpic = new HashMap<>();
+    protected Map<Integer, Subtask> idSubtask = new HashMap<>();
     private HistoryManager history;
 
-    private int id = 1;
+    protected int id = 0;
 
     public InMemoryTaskManager() {
         this.history = Managers.getDefaultHistory();
     }
 
     private Integer generateNewId() {
-        return id++;
+        return ++id;
     }
 
     @Override
