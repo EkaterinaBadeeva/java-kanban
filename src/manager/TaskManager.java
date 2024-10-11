@@ -5,6 +5,7 @@ import model.Subtask;
 import model.Task;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskManager {
     Task addNewTask(Task newTask);
@@ -39,11 +40,13 @@ public interface TaskManager {
 
     void deleteAllOfEpic();
 
-    Task getByIdTask(Integer id);
+    Optional<Task> getByIdTask(Integer id);
 
-    Subtask getByIdSubtask(Integer id);
+    Optional<Subtask> getByIdSubtask(Integer id);
 
     Epic getByIdEpic(Integer id);
+
+    List<Task> getPrioritizedTasks();
 
     List<Task> getHistory();
 
