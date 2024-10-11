@@ -567,12 +567,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldNotAcrossTasks() throws IOException {
         //prepare
+        Instant commonStart = Instant.now().plus(100, ChronoUnit.MINUTES);
         Task task = new Task(0, "Test task", "Test task description", Status.NEW,
                 Instant.now().plus(10, ChronoUnit.MINUTES), Duration.ofMinutes(10));
         Task task2 = new Task(1, "Test task2", "Test task2 description", Status.NEW,
-                Instant.now().plus(100, ChronoUnit.MINUTES), Duration.ofMinutes(10));
+                commonStart, Duration.ofMinutes(10));
         Task task3 = new Task(10, "Test task3", "Test task2 description", Status.NEW,
-                Instant.now().plus(100, ChronoUnit.MINUTES), Duration.ofMinutes(10));
+                commonStart, Duration.ofMinutes(10));
 
         //do
         taskManager.addNewTask(task);
