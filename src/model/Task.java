@@ -1,5 +1,10 @@
 package model;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -8,18 +13,33 @@ public class Task {
     private Status status;
     private Integer id;
     private TypeTasks typeTasks = TypeTasks.TASK;
+    private Duration duration;
+    private Instant startTime;
 
     public Task(Integer id, String name, String description, Status status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.startTime = null;
+        this.duration = null;
     }
 
     public Task(Integer id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.startTime = null;
+        this.duration = null;
+    }
+
+    public Task(Integer id, String name, String description, Status status, Instant startTime, Duration duration) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
     public String getName() {
@@ -56,7 +76,18 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + "," + typeTasks + "," + name + "," + status + "," + description;
+        return id + "," + typeTasks + "," + name + ","
+                + status + "," + description + "," + dateToString(startTime) + "," + duration.toMinutes() + ","
+                + dateToString(getEndTime());
+    }
+
+    protected String dateToString(Instant time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        if (time != null) {
+            LocalDateTime timeToString = LocalDateTime.ofInstant(time, ZoneOffset.UTC);
+            return timeToString.format(formatter);
+        }
+        return LocalDateTime.of(1, 1, 1, 0, 0, 0).format(formatter);
     }
 
     @Override
@@ -74,5 +105,33 @@ public class Task {
 
     public TypeTasks getTypeTasks() {
         return typeTasks;
+    }
+
+    public Instant getEndTime() {
+        if (startTime != null)
+            return startTime.plus(duration);
+        return null;
+    }
+
+    public Instant getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public long getDurationOfMinutes() {
+        if (duration == null)
+            return Duration.ofMinutes(0).toMinutes();
+        return duration.toMinutes();
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 }

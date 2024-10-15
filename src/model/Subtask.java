@@ -1,16 +1,14 @@
 package model;
 
+import java.time.Duration;
+import java.time.Instant;
+
 public class Subtask extends Task {
     private int epicId;
     private TypeTasks typeTasks = TypeTasks.SUBTASK;
 
-    public Subtask(Integer id, String name, String description, Status status, int epicId) {
-        super(id, name, description, status);
-        this.epicId = epicId;
-    }
-
-    public Subtask(Integer id, String name, String description, int epicId) {
-        super(id, name, description);
+    public Subtask(Integer id, String name, String description, Status status, Instant startTime, Duration duration, int epicId) {
+        super(id, name, description, status, startTime, duration);
         this.epicId = epicId;
     }
 
@@ -23,7 +21,8 @@ public class Subtask extends Task {
 
         return this.getId() + "," + typeTasks +
                 "," + this.getName() + "," + this.getStatus() + "," +
-                this.getDescription() + "," + epicId;
+                this.getDescription() + "," + dateToString(this.getStartTime()) + "," + this.getDurationOfMinutes() + ","
+                + dateToString(this.getEndTime()) + "," + epicId;
     }
 
     @Override

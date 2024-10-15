@@ -1,10 +1,13 @@
 package model;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private TypeTasks typeTasks = TypeTasks.EPIC;
     private ArrayList<Integer> subtaskIds = new ArrayList<>();
+    private Instant endTime;
 
     public Epic(Integer id, String name, String description) {
         super(id, name, description);
@@ -18,6 +21,10 @@ public class Epic extends Task {
     public Epic(Integer id, String name, String description, Status status, ArrayList<Integer> subtaskIds) {
         super(id, name, description, status);
         this.subtaskIds = subtaskIds;
+    }
+
+    public Epic(Integer id, String name, String description, Status status, Instant startTime, Duration duration, Instant endTime) {
+        super(id, name, description, status, startTime, duration);
     }
 
     public void addSubtaskId(int subtaskId) {
@@ -51,12 +58,22 @@ public class Epic extends Task {
 
         return this.getId() + "," + typeTasks +
                 "," + this.getName() + "," + this.getStatus() + "," +
-                this.getDescription();
+                this.getDescription() + "," + dateToString(this.getStartTime()) + "," + this.getDurationOfMinutes() + ","
+                + dateToString(this.getEndTime());
     }
 
     @Override
     public TypeTasks getTypeTasks() {
         return typeTasks;
+    }
+
+    @Override
+    public Instant getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
     }
 }
 
