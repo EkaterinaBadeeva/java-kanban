@@ -44,7 +44,7 @@ public interface TaskManager {
 
     Optional<Subtask> getByIdSubtask(Integer id);
 
-    Epic getByIdEpic(Integer id);
+    Optional<Epic> getByIdEpic(Integer id);
 
     List<Task> getPrioritizedTasks();
 

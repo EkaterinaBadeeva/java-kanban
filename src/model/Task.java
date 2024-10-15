@@ -15,24 +15,22 @@ public class Task {
     private TypeTasks typeTasks = TypeTasks.TASK;
     private Duration duration;
     private Instant startTime;
-    private Instant endTime;
 
-    // Конструктор для тестов в Main
     public Task(Integer id, String name, String description, Status status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
-        this.startTime = Instant.now();
-        this.duration = Duration.ofMinutes(0);
+        this.startTime = null;
+        this.duration = null;
     }
 
     public Task(Integer id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.startTime = Instant.now();
-        this.duration = Duration.ofMinutes(0);
+        this.startTime = null;
+        this.duration = null;
     }
 
     public Task(Integer id, String name, String description, Status status, Instant startTime, Duration duration) {
@@ -42,17 +40,6 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         this.duration = duration;
-        this.endTime = getEndTime();
-    }
-
-    public Task(Integer id, String name, String description, Status status, Instant startTime, Duration duration, Instant endTime) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.status = status;
-        this.startTime = startTime;
-        this.duration = duration;
-        this.endTime = getEndTime();
     }
 
     public String getName() {
@@ -91,7 +78,7 @@ public class Task {
     public String toString() {
         return id + "," + typeTasks + "," + name + ","
                 + status + "," + description + "," + dateToString(startTime) + "," + duration.toMinutes() + ","
-                + dateToString(endTime);
+                + dateToString(getEndTime());
     }
 
     protected String dateToString(Instant time) {
@@ -134,12 +121,14 @@ public class Task {
         this.startTime = startTime;
     }
 
-    public void setEndTime(Instant endTime) {
-        this.endTime = endTime;
-    }
-
     public Duration getDuration() {
         return duration;
+    }
+
+    public long getDurationOfMinutes() {
+        if (duration == null)
+            return Duration.ofMinutes(0).toMinutes();
+        return duration.toMinutes();
     }
 
     public void setDuration(Duration duration) {

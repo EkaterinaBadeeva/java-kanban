@@ -116,7 +116,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
                 Duration.ofMinutes(10), epic.getId());
         taskManager.updateSubtask(subtask2);
         int epicID = subtask2.getEpicId();
-        Epic updateEpic = taskManager.getByIdEpic(epicID);
+        Epic updateEpic = taskManager.getByIdEpic(epicID).orElse(null);
 
         //check
         assertEquals(epic, updateEpic, "Эпик не обновился.");

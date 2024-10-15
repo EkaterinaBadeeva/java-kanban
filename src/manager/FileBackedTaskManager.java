@@ -85,10 +85,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             switch (type) {
                 case TASK:
-                    return new Task(id, name, description, status, startTime, duration, endTime);
+                    return new Task(id, name, description, status, startTime, duration);
+               // return new Task(id, name, description, status, startTime, duration, endTime);
 
                 case SUBTASK:
-                    return new Subtask(id, name, description, status, Integer.parseInt(contents[8]));
+                    return new Subtask(id, name, description, status, startTime, duration, Integer.parseInt(contents[8]));
 
                 case EPIC:
                     return new Epic(id, name, description, status, startTime, duration, endTime);

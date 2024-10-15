@@ -271,10 +271,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getByIdEpic(Integer id) {
+    public Optional<Epic> getByIdEpic(Integer id) {
         Epic epic = idEpic.get(id);
         history.addHistory(epic);
-        return epic;
+        return Optional.ofNullable(epic);
     }
 
     private void updateEpicStatus(Epic epic) {
@@ -311,7 +311,7 @@ public class InMemoryTaskManager implements TaskManager {
                 .map(subtaskId -> {
                     return (idSubtask.get(subtaskId));
                 })
-                //  .filter(subtask -> !subtask.equals(null) && subtask.getStartTime() != null)
+                .filter(subtask -> !subtask.equals(null) && subtask.getStartTime() != null)
                 .map(subtask -> {
                     return (subtask.getStartTime());
                 })
@@ -326,11 +326,15 @@ public class InMemoryTaskManager implements TaskManager {
                 .map(subtaskId -> {
                     return (idSubtask.get(subtaskId));
                 })
-                .filter(subtask -> !subtask.equals(null))
+                .filter(subtask -> !subtask.equals(null) && subtask.getDuration() != null)
                 .map(subtask -> {
                     return (subtask.getDuration());
                 })
                 .reduce(Duration.ZERO, (duration, duration2) -> duration = duration.plus(duration2));
+
+        if (epicDuration == Duration.ZERO) {
+            epicDuration = null;
+        }
 
         epic.setDuration(epicDuration);
     }
@@ -361,9 +365,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     private void updateTreeSet(Task updatedTask) {
         int idTask = updatedTask.getId();
-        Task oldTask = allTasks.stream().filter(task -> task.getId() == idTask).findFirst().get();
-        if (oldTask != null) {
-            allTasks.remove(oldTask);
+        Optional<Task> oldTask = allTasks.stream()
+                .filter(task -> task != null)
+                .filter(task -> task.getId() == idTask)
+                .findFirst();
+
+        if (oldTask.isPresent()) {
+            allTasks.remove(oldTask.get());
         }
 
         if (updatedTask.getStartTime() != null) {
@@ -420,7 +428,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void removeTaskFromTaskDuration(Task task) {
-        //if (task == null) return;
+
         if (task.getStartTime() == null || task.getDuration() == null) {
             return;
         }

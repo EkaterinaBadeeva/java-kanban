@@ -49,13 +49,15 @@ class InMemoryHistoryManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Test
     public void shouldSaveFirstVersionTask() {
         //prepare
-        Task task = new Task(0, "Test task Version1", "Test task Version1 description", Status.NEW);
+        Task task = new Task(0, "Test task Version1", "Test task Version1 description", Status.NEW,
+                Instant.now().plus(100, ChronoUnit.MINUTES), Duration.ofMinutes(50));
         taskManager.addNewTask(task);
         int taskId = task.getId();
         taskManager.getByIdTask(taskId);
 
         //do
-        Task task2 = new Task(taskId, "Test task Version2", "Test task Version2 description", Status.DONE);
+        Task task2 = new Task(taskId, "Test task Version2", "Test task Version2 description", Status.DONE,
+                Instant.now().plus(100, ChronoUnit.MINUTES), Duration.ofMinutes(50));
         taskManager.updateTask(task2);
         final List<Task> history = taskManager.getHistory();
         String nameFirstVersionTask = history.getLast().getName();

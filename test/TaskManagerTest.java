@@ -303,7 +303,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         //do
         Epic createdEpic = taskManager.addNewEpic(epic);
         final int epicId = createdEpic.getId();
-        final Epic savedEpic = taskManager.getByIdEpic(epicId);
+        final Epic savedEpic = taskManager.getByIdEpic(epicId).orElse(null);
 
         //check
         assertNotNull(savedEpic, "Эпик не найден.");
@@ -345,7 +345,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         //do
         taskManager.updateSubtask(subtask2);
         int epicID = subtask2.getEpicId();
-        Epic updateEpic = taskManager.getByIdEpic(epicID);
+        Epic updateEpic = taskManager.getByIdEpic(epicID).orElse(null);
 
         //check
         assertEquals(epic, updateEpic, "Эпик не обновился.");
@@ -353,14 +353,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
         //do
         final int subtaskId3 = taskManager.addNewTask(subtask3).getId();
         int epicIDForSubtask3 = subtask3.getEpicId();
-        Epic updateEpicAfterAdd = taskManager.getByIdEpic(epicIDForSubtask3);
+        Epic updateEpicAfterAdd = taskManager.getByIdEpic(epicIDForSubtask3).orElse(null);
 
         //check
         assertEquals(epic, updateEpicAfterAdd, "Эпик не обновился.");
 
         //do
         taskManager.deleteSubtask(subtaskId3);
-        Epic updateEpicAfterDelete = taskManager.getByIdEpic(epicIDForSubtask3);
+        Epic updateEpicAfterDelete = taskManager.getByIdEpic(epicIDForSubtask3).orElse(null);
 
         //check
         assertEquals(epic, updateEpicAfterDelete, "Эпик не обновился.");
@@ -402,7 +402,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.deleteEpic(epicId);
 
         //check
-        assertNull(taskManager.getByIdEpic(epicId), "Эпик не удален.");
+        assertNull(taskManager.getByIdEpic(epicId).orElse(null), "Эпик не удален.");
         assertNull(taskManager.getByIdSubtask(subtaskId).orElse(null), "Подзадача не удалена.");
         assertNull(taskManager.getByIdSubtask(subtaskId2).orElse(null), "Подзадача2 не удалена.");
         assertFalse(createdEpic.getSubtaskIds().contains(subtaskId), "Id подзадачи не удалилось.");
@@ -445,7 +445,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         //prepare
         Epic epic = new Epic(14, "Test epic", "Test epic description");
         taskManager.addNewEpic(epic);
-        Epic epicTest = taskManager.getByIdEpic(epic.getId());
+        Epic epicTest = taskManager.getByIdEpic(epic.getId()).orElse(null);
 
         //do
         final List<Task> history = taskManager.getHistory();

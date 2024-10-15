@@ -110,7 +110,7 @@ public class Main {
 
         System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()).orElse(null));
         System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()).orElse(null));
-        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()).orElse(null));
 
         System.out.println("-".repeat(100));
         System.out.println();
@@ -120,19 +120,19 @@ public class Main {
 
         System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()).orElse(null));
         System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()).orElse(null));
-        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()).orElse(null));
         System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()).orElse(null));
         System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()).orElse(null));
-        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()).orElse(null));
         System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()).orElse(null));
         System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()).orElse(null));
-        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()).orElse(null));
         System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()).orElse(null));
         System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()).orElse(null));
-        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()).orElse(null));
         System.out.println("Задача по id: " + taskManager.getByIdTask(taskTwo.getId()).orElse(null));
         System.out.println("Подзадача по id: " + taskManager.getByIdSubtask(subtaskOneInEpicOne.getId()).orElse(null));
-        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()));
+        System.out.println("Эпик по id: " + taskManager.getByIdEpic(epicTwo.getId()).orElse(null));
 
         System.out.println("-".repeat(100));
         System.out.println();
