@@ -12,12 +12,13 @@ public class Task {
     private String description;
     private Status status;
     private Integer id;
-    private TypeTasks typeTasks = TypeTasks.TASK;
+    protected TypeTasks typeTasks;
     private Duration duration;
     private Instant startTime;
 
     public Task(Integer id, String name, String description, Status status) {
         this.id = id;
+        this.typeTasks = TypeTasks.TASK;
         this.name = name;
         this.description = description;
         this.status = status;
@@ -27,6 +28,7 @@ public class Task {
 
     public Task(Integer id, String name, String description) {
         this.id = id;
+        this.typeTasks = TypeTasks.TASK;
         this.name = name;
         this.description = description;
         this.startTime = null;
@@ -35,6 +37,7 @@ public class Task {
 
     public Task(Integer id, String name, String description, Status status, Instant startTime, Duration duration) {
         this.id = id;
+        this.typeTasks = TypeTasks.TASK;
         this.name = name;
         this.description = description;
         this.status = status;

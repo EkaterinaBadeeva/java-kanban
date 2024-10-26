@@ -73,20 +73,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             Instant startTime = null;
             if (!contents[5].equals("")) {
-                startTime = LocalDateTime.parse(contents[5], formatter).atZone(ZoneId.of("Europe/Moscow")).toInstant();
+                startTime = LocalDateTime.parse(contents[5], formatter).toInstant(ZoneOffset.UTC);
             }
 
             Duration duration = Duration.ofMinutes(Integer.parseInt(contents[6]));
 
             Instant endTime = null;
             if (!contents[7].equals("")) {
-                endTime = LocalDateTime.parse(contents[7], formatter).atZone(ZoneId.of("Europe/Moscow")).toInstant();
+                endTime = LocalDateTime.parse(contents[7], formatter).toInstant(ZoneOffset.UTC);
             }
 
             switch (type) {
                 case TASK:
                     return new Task(id, name, description, status, startTime, duration);
-               // return new Task(id, name, description, status, startTime, duration, endTime);
 
                 case SUBTASK:
                     return new Subtask(id, name, description, status, startTime, duration, Integer.parseInt(contents[8]));
@@ -120,10 +119,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                 switch (task.getTypeTasks()) {
                     case TASK:
+                        if (!taskManager.controlIntersectionTasks(task)) {
+                            System.out.println("Пересечение интервалов задач");
+                            continue;
+                        }
                         taskManager.idTask.put(taskId, task);
+                        taskManager.addToTreeSet(task);
                         break;
                     case SUBTASK:
+                        if (!taskManager.controlIntersectionTasks(task)) {
+                            System.out.println("Пересечение интервалов задач");
+                            continue;
+                        }
                         taskManager.idSubtask.put(taskId, (Subtask) task);
+                        taskManager.addToTreeSet(task);
                         break;
                     case EPIC:
                         taskManager.idEpic.put(taskId, (Epic) task);
@@ -292,7 +301,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 "Описание Задачи4", Status.NEW, Instant.now().plus(20, ChronoUnit.MINUTES), Duration.ofMinutes(45));
         fileTaskManagerFromFile.addNewTask(task4);
         System.out.println("Все задачи: " + fileTaskManagerFromFile.getAllOfTask());
-
 
         fileTaskManager.deleteAllOfTask();
         List<Task> sortedList = fileTaskManager.getPrioritizedTasks();

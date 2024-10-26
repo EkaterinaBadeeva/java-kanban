@@ -77,13 +77,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task updateTask(Task updatedTask) {
-        if (controlIntersectionTasks(updatedTask)) {
+        int id = updatedTask.getId();
+        // Удаляем времменой интервал исходной задачи
+        Task oldTask = idTask.get(id);
+        removeTaskFromTaskDuration(oldTask);
+
+        if (!controlIntersectionTasks(updatedTask)) {
             System.out.println("Пересечение интервалов задач");
+            controlIntersectionTasks(oldTask);
             return null;
         }
 
-        if (idTask.containsKey(updatedTask.getId())) {
-            idTask.put(updatedTask.getId(), updatedTask);
+        if (idTask.containsKey(id)) {
+            idTask.put(id, updatedTask);
             updateTreeSet(updatedTask);
             return updatedTask;
         } else {
@@ -104,10 +110,17 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Подзадача с таким id не найдена");
             return null;
         }
+
+        // Удаляем времменой интервал исходной задачи
+        Subtask oldSubtask = idSubtask.get(updatedSubtaskId);
+        removeTaskFromTaskDuration(oldSubtask);
+
         if (!controlIntersectionTasks(updatedSubtask)) {
             System.out.println("Пересечение интервалов задач");
+            controlIntersectionTasks(oldSubtask);
             return null;
         }
+
         idSubtask.put(updatedSubtaskId, updatedSubtask);
         updateTreeSet(updatedSubtask);
         Epic epic = idEpic.get(updatedSubtask.getEpicId());
@@ -358,7 +371,7 @@ public class InMemoryTaskManager implements TaskManager {
         return allTasks.stream().filter(task -> !task.getStartTime().equals(null)).toList();
     }
 
-    private void addToTreeSet(Task task) {
+    public void addToTreeSet(Task task) {
         if (task.getStartTime() != null)
             allTasks.add(task);
     }
@@ -390,7 +403,7 @@ public class InMemoryTaskManager implements TaskManager {
         return history.getHistory();
     }
 
-    private boolean controlIntersectionTasks(Task task) {
+    public boolean controlIntersectionTasks(Task task) {
 
         boolean isFree = true;
         if ((task.getStartTime() == null) || (task.getDuration() == null)) {

@@ -50,4 +50,8 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
+    boolean controlIntersectionTasks(Task task);
+
+    void addToTreeSet(Task task);
+
 }
