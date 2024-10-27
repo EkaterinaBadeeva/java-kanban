@@ -86,10 +86,24 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                         }
                         break;
 
+                    } else if (Pattern.matches("/epics/\\d+$", path)) {
+                        String pathID = path.replaceFirst("/epics/", "");
+                        int id = parsePathId(pathID);
+                        String textOfBody = readText(exchange);
+                        Epic epic = gson.fromJson(textOfBody, Epic.class);
+                        Epic updatedEpic = taskManager.updateEpic(epic);
+
+                        if (id != -1 && updatedEpic != null) {
+                            String response = gson.toJson(updatedEpic);
+                            sendText(exchange, response);
+                        } else {
+                            System.out.println("Получен не корректный id = " + pathID);
+                            exchange.sendResponseHeaders(404, 0);
+                        }
+                        break;
                     } else {
                         exchange.sendResponseHeaders(405, 0);
                     }
-
                     break;
                 }
                 case "DELETE": {

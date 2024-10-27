@@ -415,6 +415,32 @@ public class HTTPTaskServerTest {
     }
 
     @Test
+    void shouldUpdateEpic() throws IOException, InterruptedException {
+        //prepare
+        Epic epic = new Epic(1, "Test epic", "Test epic description");
+        Epic newEpic = taskManager.addNewEpic(epic);
+        int id = newEpic.getId();
+
+        Epic epic1 = new Epic(id, "Test epic1", "Test epic1 description");
+
+        String epicJson = gson.toJson(epic1);
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create("http://localhost:8080/epics/" + id);
+        HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(epicJson)).build();
+
+        //do
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+
+        List<Epic> epicFromManager = taskManager.getAllOfEpic();
+
+        //check
+        assertNotNull(epicFromManager, "Эпики не возвращаются");
+        assertEquals(1, epicFromManager.size(), "Некорректное количество эпиков");
+        assertEquals("Test epic1", epicFromManager.get(0).getName(), "Некорректное имя эпика");
+    }
+
+    @Test
     void shouldDeleteEpic() throws IOException, InterruptedException {
         //prepare
         Epic epic = new Epic(1, "Test epic", "Test epic description");

@@ -143,7 +143,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setName(updatedEpic.getName());
         epic.setDescription(updatedEpic.getDescription());
 
-        return updatedEpic;
+        return epic;
     }
 
     @Override
