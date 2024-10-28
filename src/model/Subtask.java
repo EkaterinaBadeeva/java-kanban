@@ -5,11 +5,11 @@ import java.time.Instant;
 
 public class Subtask extends Task {
     private int epicId;
-    private TypeTasks typeTasks = TypeTasks.SUBTASK;
 
     public Subtask(Integer id, String name, String description, Status status, Instant startTime, Duration duration, int epicId) {
         super(id, name, description, status, startTime, duration);
         this.epicId = epicId;
+        this.typeTasks = TypeTasks.SUBTASK;
     }
 
     public int getEpicId() {
